@@ -4,7 +4,7 @@
     {
         #region Fields
 
-        public const int ProgramCounterStart = -1;
+        public const int ProgramCounterStart = 0;
 
         public int _extremePointer;
         public int _framePointer;
@@ -67,7 +67,7 @@
 
             this.FramePointer = 0;
 
-            this.HeapPointer = 0;
+            this.HeapPointer = Memory.HeapSize;
 
             this.ExtremePointer = 0;
         }

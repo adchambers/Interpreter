@@ -6,7 +6,7 @@ namespace SharedLibrary
     {
         #region Fields
 
-        public static int TotalAllocatedMemory = 56;
+        public static int HeapSize = 56;
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace SharedLibrary
         {
             Memory.Main = new ObservableCollection<int>();
 
-            for (int i = 0; i <= Memory.TotalAllocatedMemory; i++)
+            for (int i = 0; i <= Memory.HeapSize; i++)
             {
                 Memory.Main.Add(0);
             }

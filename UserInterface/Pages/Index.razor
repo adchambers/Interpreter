@@ -14,7 +14,7 @@
 </style>
 
 <table>
-    @for (int i = Memory.TotalAllocatedMemory; i >= 0; i--)
+    @for (int i = Memory.HeapSize; i >= 0; i--)
     {
         string color = "white";
 
@@ -95,3 +95,28 @@
         }
     }*@
 </table>
+
+@{
+    @*Memory.BindableBase.Text = "loadc 10\n"
+                               + "mark\n"
+                               + "loadc fac\n"
+                               + "call\n"
+                               + "loadc 20\n"
+                               + "add\n"
+                               + "fac enter 12\n"
+                               + "loadc 30\n"
+                               + "loadc 40\n"
+                               + "return 0";*@
+
+    Memory.BindableBase.Text = "main enter 7\n"
+                               + "alloc 1\n"
+                               + "alloc 1\n"
+                               + "mark\n"
+                               + "loadc 4\n"
+                               + "loadc fac\n"
+                               + "call\n"
+                               + "fac enter 12\n"
+                               + "loadc 30\n"
+                               + "loadc 40\n"
+                               + "return 0";
+}

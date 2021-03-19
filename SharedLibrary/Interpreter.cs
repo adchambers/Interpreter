@@ -30,33 +30,32 @@ namespace SharedLibrary
         {
             Interpreter.Program = Parser.ParseInstructions();
 
-            Interpreter.Registers.Init();
+            //Interpreter.Registers.Init();
 
-            switch (move)
-            {
-                case Move.Next:
-                    Interpreter.Registers.ProgramCounter++;
-                    break;
-                case Move.End:
-                    Interpreter.Registers.ProgramCounter = Interpreter.Program.Count - 1;
-                    break;
-                case Move.Previous:
-                    Interpreter.Registers.ProgramCounter--;
-                    break;
-                case Move.Restart:
-                    Interpreter.Registers.ProgramCounter = Registers.ProgramCounterStart;
+            //switch (move)
+            //{
+            //    case Move.Next:
+            //        Interpreter.Registers.ProgramCounter++;
+            //        break;
+            //    case Move.End:
+            //        Interpreter.Registers.ProgramCounter = Interpreter.Program.Count - 1;
+            //        break;
+            //    case Move.Previous:
+            //        Interpreter.Registers.ProgramCounter--;
+            //        break;
+            //    case Move.Restart:
+            //        Interpreter.Registers.ProgramCounter = Registers.ProgramCounterStart;
 
-                    Interpreter.Registers.Init();
+            //        Interpreter.Registers.Init();
 
-                    Memory.InitMainMemory();
+            //        Memory.InitMainMemory();
 
-                    break;
-            }
+            //        return;
+            //}
 
-            for (int i = 0; i <= Interpreter.Registers.ProgramCounter; i++)
-            {
-                Interpreter.Program[i].Action.Invoke();
-            }
+            Interpreter.Program[Interpreter.Registers.ProgramCounter].Action.Invoke();
+
+            Interpreter.Registers.ProgramCounter++;
         }
 
         #endregion
