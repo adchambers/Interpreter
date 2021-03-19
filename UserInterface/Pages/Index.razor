@@ -1,0 +1,97 @@
+﻿@page "/"
+
+@using SharedLibrary
+
+<style>
+    table, tr, td, th {
+
+
+
+
+     padding: 0px 10px;
+     border: 1px solid gray;
+        }
+</style>
+
+<table>
+    @for (int i = Memory.TotalAllocatedMemory; i >= 0; i--)
+    {
+        string color = "white";
+
+        if (i <= Interpreter.Registers.ExtremePointer)
+        {
+            color = "lightblue";
+        }
+
+        if (i <= Interpreter.Registers.StackPointer)
+        {
+            color = "lightgreen";
+        }
+
+        <tr>
+            @if (i == 0)
+            {
+                <td>@Interpreter.Registers.StackPointer</td>
+                <td>@Interpreter.Registers.FramePointer</td>
+                <td>@Interpreter.Registers.ExtremePointer</td>
+                <td>@Interpreter.Registers.ProgramCounter</td>
+                <td>@Interpreter.Registers.HeapPointer</td>
+            }
+            else
+            {
+                <td colspan="5"></td>
+            }
+            <td style="background-color: @color">@i</td>
+            <td style="background-color: @color">@Memory.Main[i]</td>
+        </tr>
+    }
+    <tr>
+        <th style="background-color: lightgreen">SP</th>
+        <th>FP</th>
+        <th style="background-color: lightblue">EP</th>
+        <th>PC</th>
+        <th>HP</th>
+        <th>Address</th>
+        <th>ValueWithArgs</th>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <div style="margin: 1vw">
+                <input type="button" value="Back" @onclick="() => Interpreter.Run(Interpreter.Move.Previous)" />
+                <input type="button" value="Next" @onclick="() => Interpreter.Run(Interpreter.Move.Next)" />
+                <input type="button" value="Restart" @onclick="() => Interpreter.Run(Interpreter.Move.Restart)" />
+                <input type="button" value="Run" @onclick="() => Interpreter.Run(Interpreter.Move.End)" />
+            </div>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td colspan="2">
+            <textarea style="height: 25vh; width: 30vw; margin-left: 5vw" @bind="Memory.BindableBase.Text" @bind:event="oninput"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <input type="button" value="Interpret" @onclick="() => Interpreter.Program = Parser.ParseInstructions()" />
+    </tr>
+    <tr>
+        <th>PC</th>
+        <th>Command</th>
+    </tr>
+    @*@if (Interpreter.CommandStrings != null)
+    {
+        for (int i = 0; i < Interpreter.CommandStrings.Count; i++)
+        {
+            <tr>
+                <td>
+                    @if (i == Interpreter.Registers.ProgramCounter)
+                    {
+                        <span>></span>
+                    }
+                </td>
+                <td><b>@Interpreter.CommandStrings[i]</b></td>
+            </tr>
+        }
+    }*@
+</table>
