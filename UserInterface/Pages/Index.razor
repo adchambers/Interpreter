@@ -2,121 +2,129 @@
 
 @using SharedLibrary
 
-<style>
-    table, tr, td, th {
+@{
+    @*Memory.BindableBase.Text = "loadc 10\n"
+        + "mark\n"
+        + "loadc fac\n"
+        + "call\n"
+        + "loadc 20\n"
+        + "add\n"
+        + "halt\n"
+        + "fac enter 12\n"
+        + "loadc 30\n"
+        + "loadc 40\n"
+        + "return 0";*@
 
+    @*Memory.BindableBase.Text = "main enter 7\n"
+        + "alloc 1\n"
+        + "alloc 1\n"
+        + "mark\n"
+        + "loadc 4\n"
+        + "loadc fac\n"
+        + "call\n"
+        + "fac enter 12\n"
+        + "loadc 30\n"
+        + "loadc 40\n"
+        + "return 0";*@
+}
 
+<div style="margin: 10vw;">
+    <div class="left-view">
+        <textarea style="height: 100%; width: 100%" @bind="Memory.BindableBase.Text" @bind:event="oninput"></textarea>
+        <input type="button" value="Interpret" style="display: inline-block; width: 100%" @onclick="() => Interpreter.Program = Parser.ParseInstructions()" />
+    </div>
+    <div class="center-view">
+        <table style="height: 100%">
+            <tr style="height: 100%"></tr>
 
-
-     padding: 0px 10px;
-     border: 1px solid gray;
-        }
-</style>
-
-<table>
-    @for (int i = Memory.HeapSize; i >= 0; i--)
-    {
-        string color = "white";
-
-        if (i <= Interpreter.Registers.ExtremePointer)
-        {
-            color = "lightblue";
-        }
-
-        if (i <= Interpreter.Registers.StackPointer)
-        {
-            color = "lightgreen";
-        }
-
-        <tr>
-            @if (i == 0)
+            @if (Interpreter.Program != null
+                 && Interpreter.Program.Count > 0)
             {
-                <td>@Interpreter.Registers.StackPointer</td>
-                <td>@Interpreter.Registers.FramePointer</td>
-                <td>@Interpreter.Registers.ExtremePointer</td>
-                <td>@Interpreter.Registers.ProgramCounter</td>
-                <td>@Interpreter.Registers.HeapPointer</td>
+                <tr>
+                    <th><span style="color: white">></span></th>
+                    <th>PC Address</th>
+                    <th>Instruction</th>
+                    <th style="background-color: lightgreen">SP</th>
+                    <th>FP</th>
+                    <th style="background-color: lightblue">EP</th>
+                    <th>PC</th>
+                    <th>HP</th>
+                </tr>
+                foreach (Instruction instruction in Interpreter.Program)
+                {
+                    <tr>
+                        <td>
+                            @if (Interpreter.Program.IndexOf(instruction) == Interpreter.Registers.ProgramCounter)
+                            {
+                                <b>></b>
+                            }
+                        </td>
+                        <td>@instruction.Address</td>
+                        <td><b>@String.Join(' ', instruction.ValueWithArgs)</b></td>
+
+                        @if (Interpreter.Program.IndexOf(instruction) == 0)
+                        {
+                            <td>@Interpreter.Registers.StackPointer</td>
+                            <td>@Interpreter.Registers.FramePointer</td>
+                            <td>@Interpreter.Registers.ExtremePointer</td>
+                            <td>@Interpreter.Registers.ProgramCounter</td>
+                            <td>@Interpreter.Registers.HeapPointer</td>
+                        }
+                        else
+                        {
+                            <td colspan="5" style="background-color: lightgray"></td>
+                        }
+                    </tr>
+                }
+                <tr>
+                <td colspan="8">
+                <div style="margin: 2vw; text-align: center">
+                    <input type="button" value="Restart" @onclick="() => Interpreter.Run(Interpreter.Move.Restart)"/>
+                    <input type="button" value="Next" @onclick="() => Interpreter.Run(Interpreter.Move.Next)"/>
+                </div>
+                </td >
+                </tr >
             }
             else
             {
-                <td colspan="5"></td>
+                <tr>
+                    <td>No instructions loaded at this time.</td>
+                </tr>
             }
-            <td style="background-color: @color">@i</td>
-            <td style="background-color: @color">@Memory.Main[i]</td>
-        </tr>
-    }
-    <tr>
-        <th style="background-color: lightgreen">SP</th>
-        <th>FP</th>
-        <th style="background-color: lightblue">EP</th>
-        <th>PC</th>
-        <th>HP</th>
-        <th>Address</th>
-        <th>ValueWithArgs</th>
-    </tr>
-    <tr>
-        <td colspan="7">
-            <div style="margin: 1vw">
-                <input type="button" value="Back" @onclick="() => Interpreter.Run(Interpreter.Move.Previous)" />
-                <input type="button" value="Next" @onclick="() => Interpreter.Run(Interpreter.Move.Next)" />
-                <input type="button" value="Restart" @onclick="() => Interpreter.Run(Interpreter.Move.Restart)" />
-                <input type="button" value="Run" @onclick="() => Interpreter.Run(Interpreter.Move.End)" />
-            </div>
-        </td>
-    </tr>
-</table>
+        </table>
+    </div>
 
-<table>
-    <tr>
-        <td colspan="2">
-            <textarea style="height: 25vh; width: 30vw; margin-left: 5vw" @bind="Memory.BindableBase.Text" @bind:event="oninput"></textarea>
-        </td>
-    </tr>
-    <tr>
-        <input type="button" value="Interpret" @onclick="() => Interpreter.Program = Parser.ParseInstructions()" />
-    </tr>
-    <tr>
-        <th>PC</th>
-        <th>Command</th>
-    </tr>
-    @*@if (Interpreter.CommandStrings != null)
-    {
-        for (int i = 0; i < Interpreter.CommandStrings.Count; i++)
-        {
+    <div class="right-view">
+        <table>
             <tr>
-                <td>
-                    @if (i == Interpreter.Registers.ProgramCounter)
-                    {
-                        <span>></span>
-                    }
-                </td>
-                <td><b>@Interpreter.CommandStrings[i]</b></td>
+                <th>Address</th>
+                <th>Value</th>
             </tr>
-        }
-    }*@
-</table>
+            @for (int i = Memory.HeapSize; i >= 0; i--)
+            {
+                <tr>
+                    @{
+                        string color = "white";
 
-@{
-    @*Memory.BindableBase.Text = "loadc 10\n"
-                               + "mark\n"
-                               + "loadc fac\n"
-                               + "call\n"
-                               + "loadc 20\n"
-                               + "add\n"
-                               + "fac enter 12\n"
-                               + "loadc 30\n"
-                               + "loadc 40\n"
-                               + "return 0";*@
+                        if (i <= Interpreter.Registers.ExtremePointer)
+                        {
+                            color = "lightblue";
+                        }
 
-    Memory.BindableBase.Text = "main enter 7\n"
-                               + "alloc 1\n"
-                               + "alloc 1\n"
-                               + "mark\n"
-                               + "loadc 4\n"
-                               + "loadc fac\n"
-                               + "call\n"
-                               + "fac enter 12\n"
-                               + "loadc 30\n"
-                               + "loadc 40\n"
-                               + "return 0";
-}
+                        if (i <= Interpreter.Registers.StackPointer)
+                        {
+                            color = "lightgreen";
+                        }
+                    }
+
+                    <td style="background-color: @color">@i</td>
+                    <td style="background-color: @color">@Memory.Main[i]</td>
+                </tr>
+            }
+            <tr>
+                <th>Address</th>
+                <th>Value</th>
+            </tr>
+        </table>
+    </div>
+</div>

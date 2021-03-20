@@ -28,34 +28,23 @@ namespace SharedLibrary
 
         public static void Run(Move move)
         {
-            Interpreter.Program = Parser.ParseInstructions();
+            if (move == Move.Restart)
+            {
+                Interpreter.Registers.ProgramCounter = Registers.ProgramCounterStart;
 
-            //Interpreter.Registers.Init();
+                Interpreter.Registers.Init();
 
-            //switch (move)
-            //{
-            //    case Move.Next:
-            //        Interpreter.Registers.ProgramCounter++;
-            //        break;
-            //    case Move.End:
-            //        Interpreter.Registers.ProgramCounter = Interpreter.Program.Count - 1;
-            //        break;
-            //    case Move.Previous:
-            //        Interpreter.Registers.ProgramCounter--;
-            //        break;
-            //    case Move.Restart:
-            //        Interpreter.Registers.ProgramCounter = Registers.ProgramCounterStart;
+                Memory.InitMainMemory();
 
-            //        Interpreter.Registers.Init();
+                return;
+            }
 
-            //        Memory.InitMainMemory();
+            if (Interpreter.Registers.ProgramCounter < Interpreter.Program.Count)
+            {
+                Interpreter.Program[Interpreter.Registers.ProgramCounter].Action.Invoke();
 
-            //        return;
-            //}
-
-            Interpreter.Program[Interpreter.Registers.ProgramCounter].Action.Invoke();
-
-            Interpreter.Registers.ProgramCounter++;
+                Interpreter.Registers.ProgramCounter++;
+            }
         }
 
         #endregion

@@ -148,3 +148,35 @@ app {
         display: block;
     }
 }
+
+table, tr, td, th {
+    padding: 0px 10px;
+    border: 1px solid gray;
+}
+
+.left-view {
+    width: 20vw;
+    max-width: 30vw;
+    height: 80vh;
+    max-height: 80vh;
+    display: inline-block;
+    margin-right: 2vw
+}
+
+.center-view {
+    width: 30vw;
+    max-width: 30vw;
+    height: 80vh;
+    max-height: 80vh;
+    display: inline-block;
+    margin-right: 2vw;
+}
+.right-view {
+    width: 20vw;
+    max-width: 30vw;
+    height: 80vh;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: inline-block;
+    margin-left: 2vw
+}

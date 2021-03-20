@@ -6,7 +6,7 @@ namespace SharedLibrary
     {
         #region Fields
 
-        public static int HeapSize = 56;
+        public static int HeapSize = 48;
 
         #endregion
 
@@ -17,6 +17,8 @@ namespace SharedLibrary
             Memory.BindableBase = new BindableBase();
 
             Memory.InitMainMemory();
+
+            Memory.BindableBase.Text = "loadc 1\nloadc 2\nloadc 3";
         }
 
         #endregion

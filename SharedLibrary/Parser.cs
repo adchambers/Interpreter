@@ -10,310 +10,315 @@ namespace SharedLibrary
 
         public static IList<Instruction> ParseInstructions()
         {
-            string[] commandStrings = Memory.BindableBase.Text.Split("\n");
-
-            Interpreter.CommandStrings = commandStrings.ToList();
-
-            IList<Instruction> instructions = new List<Instruction>();
-
-            int address = 0;
-
-            foreach (string commandString in commandStrings)
+            if (string.IsNullOrWhiteSpace(Memory.BindableBase.Text) == false)
             {
-                string[] valueWithArgs = commandString.Split(" ");
+                string[] commandStrings = Memory.BindableBase.Text.Split("\n");
 
-                switch (valueWithArgs[0])
+                Interpreter.CommandStrings = commandStrings.ToList();
+
+                IList<Instruction> instructions = new List<Instruction>();
+
+                int address = 0;
+
+                foreach (string commandString in commandStrings)
                 {
-                    case "add":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address, valueWithArgs, () => Command.Add()));
-                        }
-                        else
-                        {
-                            throw new Exception("Add takes 0 arguments.");
-                        }
+                    string[] valueWithArgs = commandString.Split(" ");
 
-                        break;
-                    case "alloc":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Alloc(int.Parse(valueWithArgs[1]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Alloc takes 1 argument.");
-                        }
+                    switch (valueWithArgs[0])
+                    {
+                        case "add":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Add()));
+                            }
+                            else
+                            {
+                                throw new Exception("Add takes 0 arguments.");
+                            }
 
-                        break;
-                    case "call":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address, valueWithArgs, () => Command.Call()));
-                        }
-                        else
-                        {
-                            throw new Exception("Call takes 0 arguments.");
-                        }
+                            break;
+                        case "alloc":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Alloc(int.Parse(valueWithArgs[1]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Alloc takes 1 argument.");
+                            }
 
-                        break;
-                    case "dup":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address, valueWithArgs, () => Command.Dup()));
-                        }
-                        else
-                        {
-                            throw new Exception("Add takes 0 arguments.");
-                        }
+                            break;
+                        case "call":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Call()));
+                            }
+                            else
+                            {
+                                throw new Exception("Call takes 0 arguments.");
+                            }
 
-                        break;
+                            break;
+                        case "dup":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Dup()));
+                            }
+                            else
+                            {
+                                throw new Exception("Add takes 0 arguments.");
+                            }
 
-                    case "jumpi":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Jumpi(int.Parse(valueWithArgs[1]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Jumpi takes 1 argument.");
-                        }
+                            break;
 
-                        break;
-                    case "load":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address, valueWithArgs, () => Command.Load()));
-                        }
-                        else if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Load(int.Parse(valueWithArgs[1]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Load takes 0 to 1 argument.");
-                        }
+                        case "jumpi":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Jumpi(int.Parse(valueWithArgs[1]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Jumpi takes 1 argument.");
+                            }
 
-                        break;
-                    case "loada":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Loada(int.Parse(valueWithArgs[1]))));
-                        }
-                        else if (valueWithArgs.Length == 3)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () =>
-                                    Command.Loada(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Loada takes 1 to 2 arguments.");
-                        }
+                            break;
+                        case "load":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Load()));
+                            }
+                            else if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Load(int.Parse(valueWithArgs[1]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Load takes 0 to 1 argument.");
+                            }
 
-                        break;
-                    case "loadc":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Loadc(valueWithArgs[1])));
-                        }
-                        else
-                        {
-                            throw new Exception("Loadc takes 1 argument.");
-                        }
+                            break;
+                        case "loada":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Loada(int.Parse(valueWithArgs[1]))));
+                            }
+                            else if (valueWithArgs.Length == 3)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () =>
+                                        Command.Loada(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Loada takes 1 to 2 arguments.");
+                            }
 
-                        break;
-                    case "loadr":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Loadr(int.Parse(valueWithArgs[1]))));
-                        }
-                        else if (valueWithArgs.Length == 3)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () =>
-                                    Command.Loadr(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Loadr takes 1 to 2 arguments.");
-                        }
+                            break;
+                        case "loadc":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Loadc(valueWithArgs[1])));
+                            }
+                            else
+                            {
+                                throw new Exception("Loadc takes 1 argument.");
+                            }
 
-                        break;
-                    case "loadrc":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Loadrc(int.Parse(valueWithArgs[1]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Loadrc takes 1 argument.");
-                        }
+                            break;
+                        case "loadr":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Loadr(int.Parse(valueWithArgs[1]))));
+                            }
+                            else if (valueWithArgs.Length == 3)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () =>
+                                        Command.Loadr(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Loadr takes 1 to 2 arguments.");
+                            }
 
-                        break;
-                    case "mark":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address, valueWithArgs, () => Command.Mark()));
-                        }
-                        else
-                        {
-                            throw new Exception("Mark takes 0 arguments.");
-                        }
+                            break;
+                        case "loadrc":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Loadrc(int.Parse(valueWithArgs[1]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Loadrc takes 1 argument.");
+                            }
 
-                        break;
-                    case "new":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address, valueWithArgs, () => Command.New()));
-                        }
-                        else
-                        {
-                            throw new Exception("New takes 0 arguments.");
-                        }
+                            break;
+                        case "mark":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Mark()));
+                            }
+                            else
+                            {
+                                throw new Exception("Mark takes 0 arguments.");
+                            }
 
-                        break;
-                    case "pop":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address, valueWithArgs, () => Command.Pop()));
-                        }
-                        else
-                        {
-                            throw new Exception("Pop takes 0 arguments.");
-                        }
+                            break;
+                        case "new":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.New()));
+                            }
+                            else
+                            {
+                                throw new Exception("New takes 0 arguments.");
+                            }
 
-                        break;
-                    case "return":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Return(int.Parse(valueWithArgs[1]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Return takes 1 argument.");
-                        }
+                            break;
+                        case "pop":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Pop()));
+                            }
+                            else
+                            {
+                                throw new Exception("Pop takes 0 arguments.");
+                            }
 
-                        break;
-                    case "slide":
-                        if (valueWithArgs.Length == 3)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () =>
-                                    Command.Slide(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Slide takes 2 argument.");
-                        }
+                            break;
+                        case "return":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Return(int.Parse(valueWithArgs[1]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Return takes 1 argument.");
+                            }
 
-                        break;
-                    case "store":
-                        if (valueWithArgs.Length == 1)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Store(int.Parse(valueWithArgs[1]))));
-                        }
-                        else if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () =>
-                                    Command.Store(int.Parse(valueWithArgs[1]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Store takes 0 to 1 argument.");
-                        }
-
-                        break;
-                    case "storea":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Storea(int.Parse(valueWithArgs[1]))));
-                        }
-                        else if (valueWithArgs.Length == 3)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () =>
-                                    Command.Storea(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Storea takes 1 to 2 arguments.");
-                        }
-
-                        break;
-                    case "storer":
-                        if (valueWithArgs.Length == 2)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () => Command.Storer(int.Parse(valueWithArgs[1]))));
-                        }
-                        else if (valueWithArgs.Length == 3)
-                        {
-                            instructions.Add(new Instruction(address,
-                                valueWithArgs,
-                                () =>
-                                    Command.Storer(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
-                        }
-                        else
-                        {
-                            throw new Exception("Storer takes 1 to 2 arguments.");
-                        }
-
-                        break;
-                    default:
-                        if (valueWithArgs[1] == "enter")
-                        {
+                            break;
+                        case "slide":
                             if (valueWithArgs.Length == 3)
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Enter(int.Parse(valueWithArgs[2])),
-                                    valueWithArgs[0]));
+                                    () =>
+                                        Command.Slide(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
                             }
                             else
                             {
-                                throw new Exception("Enter takes 2 arguments.");
+                                throw new Exception("Slide takes 2 argument.");
                             }
-                        }
-                        else
-                        {
-                            throw new Exception("Unrecognized command");
-                        }
 
-                        break;
+                            break;
+                        case "store":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Store(int.Parse(valueWithArgs[1]))));
+                            }
+                            else if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () =>
+                                        Command.Store(int.Parse(valueWithArgs[1]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Store takes 0 to 1 argument.");
+                            }
+
+                            break;
+                        case "storea":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Storea(int.Parse(valueWithArgs[1]))));
+                            }
+                            else if (valueWithArgs.Length == 3)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () =>
+                                        Command.Storea(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Storea takes 1 to 2 arguments.");
+                            }
+
+                            break;
+                        case "storer":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Storer(int.Parse(valueWithArgs[1]))));
+                            }
+                            else if (valueWithArgs.Length == 3)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () =>
+                                        Command.Storer(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                            }
+                            else
+                            {
+                                throw new Exception("Storer takes 1 to 2 arguments.");
+                            }
+
+                            break;
+                        default:
+                            if (valueWithArgs[1] == "enter")
+                            {
+                                if (valueWithArgs.Length == 3)
+                                {
+                                    instructions.Add(new Instruction(address,
+                                        valueWithArgs,
+                                        () => Command.Enter(int.Parse(valueWithArgs[2])),
+                                        valueWithArgs[0]));
+                                }
+                                else
+                                {
+                                    throw new Exception("Enter takes 2 arguments.");
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception("Unrecognized command");
+                            }
+
+                            break;
+                    }
+
+                    address++;
                 }
 
-                address++;
+                return instructions;
             }
 
-            return instructions;
+            return new List<Instruction>();
         }
 
         #endregion
