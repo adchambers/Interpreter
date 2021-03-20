@@ -44,9 +44,9 @@
                     <th><span style="color: white">></span></th>
                     <th>PC Address</th>
                     <th>Instruction</th>
-                    <th style="background-color: lightgreen">SP</th>
+                    <th style="background-color: lightblue">SP</th>
                     <th>FP</th>
-                    <th style="background-color: lightblue">EP</th>
+                    <th style="background-color: lightgreen">EP</th>
                     <th>PC</th>
                     <th>HP</th>
                 </tr>
@@ -108,12 +108,12 @@
 
                         if (i <= Interpreter.Registers.ExtremePointer)
                         {
-                            color = "lightblue";
+                            color = "lightgreen";
                         }
 
                         if (i <= Interpreter.Registers.StackPointer)
                         {
-                            color = "lightgreen";
+                            color = "lightblue";
                         }
                     }
 

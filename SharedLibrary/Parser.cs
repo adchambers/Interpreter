@@ -51,13 +51,15 @@ namespace SharedLibrary
 
                             break;
                         case "call":
-                            if (valueWithArgs.Length == 1)
+                            if (valueWithArgs.Length == 2)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Call()));
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Call(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
-                                throw new Exception("Call takes 0 arguments.");
+                                throw new Exception("Call takes 1 arguments.");
                             }
 
                             break;
@@ -68,11 +70,22 @@ namespace SharedLibrary
                             }
                             else
                             {
-                                throw new Exception("Add takes 0 arguments.");
+                                throw new Exception("Dup takes 0 arguments.");
                             }
 
                             break;
 
+                        case "halt":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Halt()));
+                            }
+                            else
+                            {
+                                throw new Exception("Halt takes 0 arguments.");
+                            }
+
+                            break;
                         case "jumpi":
                             if (valueWithArgs.Length == 2)
                             {
@@ -290,7 +303,20 @@ namespace SharedLibrary
 
                             break;
                         default:
-                            if (valueWithArgs[1] == "enter")
+                            if (valueWithArgs[0] == "enter")
+                            {
+                                if (valueWithArgs.Length == 2)
+                                {
+                                    instructions.Add(new Instruction(address,
+                                        valueWithArgs,
+                                        () => Command.Enter(int.Parse(valueWithArgs[1]))));
+                                }
+                                else
+                                {
+                                    throw new Exception("Enter takes 1 arguments.");
+                                }
+                            }
+                            else if (valueWithArgs[1] == "enter")
                             {
                                 if (valueWithArgs.Length == 3)
                                 {

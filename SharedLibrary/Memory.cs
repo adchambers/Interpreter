@@ -18,7 +18,35 @@ namespace SharedLibrary
 
             Memory.InitMainMemory();
 
-            Memory.BindableBase.Text = "loadc 1\nloadc 2\nloadc 3";
+            Memory.BindableBase.Text = "enter 2\n"
+                                       + "loadc 42\n"
+                                       + "alloc 1\n"
+                                       + "enter 5\n"
+                                       + "alloc 1\n"
+                                       + "mark\n"
+                                       + "loadc _main\n"
+                                       + "call 1\n"
+                                       + "halt\n"
+                                       + "_main enter 10\n"
+                                       + "loadc 30\n"
+                                       + "loadc 40\n"
+                                       + "alloc 1\n"
+                                       + "alloc 1\n"
+                                       + "mark\n"
+                                       + "loadr 1\n"
+                                       + "loadr 2\n"
+                                       + "loadc _add\n"
+                                       + "call 1\n"
+                                       + "storer 3\n"
+                                       + "loadr 3\n"
+                                       + "return 0\n"
+                                       + "_add enter 3\n"
+                                       + "loadc 20\n"
+                                       + "loadr 1\n"
+                                       + "loadr 2\n"
+                                       + "add\n"
+                                       + "storer -3\n"
+                                       + "return 0";
         }
 
         #endregion

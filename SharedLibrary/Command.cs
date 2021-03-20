@@ -20,13 +20,14 @@ namespace SharedLibrary
             Interpreter.Registers.StackPointer = Interpreter.Registers.StackPointer + m;
         }
 
-        public static void Call()
+        public static void Call(int q)
         {
             Interpreter.Registers.FramePointer = Interpreter.Registers.StackPointer;
 
             int tmp = Interpreter.Registers.ProgramCounter;
 
-            Interpreter.Registers.ProgramCounter = Memory.Main[Interpreter.Registers.StackPointer];
+            // Modified form of call is required; otherwise, the ProgramCounter is incremented +1 beyond the called function's address
+            Interpreter.Registers.ProgramCounter = Memory.Main[Interpreter.Registers.StackPointer] - q;
 
             Memory.Main[Interpreter.Registers.StackPointer] = tmp;
         }
@@ -46,6 +47,11 @@ namespace SharedLibrary
             Interpreter.Registers.ProgramCounter = b + Memory.Main[Interpreter.Registers.StackPointer];
 
             Interpreter.Registers.StackPointer--;
+        }
+
+        public static void Halt()
+        {
+            //TODO: implement
         }
 
         public static void Load()

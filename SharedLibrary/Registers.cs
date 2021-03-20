@@ -69,7 +69,7 @@
 
             this.HeapPointer = Memory.HeapSize;
 
-            this.ExtremePointer = 0;
+            this.ExtremePointer = -1;
         }
 
         #endregion
