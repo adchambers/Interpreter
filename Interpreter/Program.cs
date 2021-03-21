@@ -8,30 +8,30 @@
         {
             //Program.Print();
 
-            //Command.Loadc(3);
+            //Instruction.Loadc(3);
 
             //Program.Print();
 
-            //Command.Loadc(4);
+            //Instruction.Loadc(4);
 
             //Program.Print();
 
-            //Command.Add();
+            //Instruction.Add();
 
             //Program.Print();
 
-            //Console.WriteLine(Memory.Main[Interpreter.Registers.StackPointer]);
+            //Console.WriteLine(DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer]);
         }
 
         #endregion
 
         //private static void Print()
         //{
-        //    Console.WriteLine($"SP={Interpreter.Registers.StackPointer}; "
-        //                      + $"PC={Interpreter.Registers.ProgramCounter}; "
-        //                      + $"EP={Interpreter.Registers.ExtremePointer}; "
-        //                      + $"FP={Interpreter.Registers.FramePointer}; "
-        //                      + $"HP={Interpreter.Registers.HeapPointer}");
+        //    Console.WriteLine($"SP={VirtualMachine.Registers.StackPointer}; "
+        //                      + $"PC={VirtualMachine.Registers.ProgramCounter}; "
+        //                      + $"EP={VirtualMachine.Registers.ExtremePointer}; "
+        //                      + $"FP={VirtualMachine.Registers.FramePointer}; "
+        //                      + $"HP={VirtualMachine.Registers.HeapPointer}");
         //}
     }
 }

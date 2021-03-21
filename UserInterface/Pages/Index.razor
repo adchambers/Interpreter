@@ -2,43 +2,17 @@
 
 @using SharedLibrary
 
-@{
-    @*Memory.BindableBase.Text = "loadc 10\n"
-        + "mark\n"
-        + "loadc fac\n"
-        + "call\n"
-        + "loadc 20\n"
-        + "add\n"
-        + "halt\n"
-        + "fac enter 12\n"
-        + "loadc 30\n"
-        + "loadc 40\n"
-        + "return 0";*@
-
-    @*Memory.BindableBase.Text = "main enter 7\n"
-        + "alloc 1\n"
-        + "alloc 1\n"
-        + "mark\n"
-        + "loadc 4\n"
-        + "loadc fac\n"
-        + "call\n"
-        + "fac enter 12\n"
-        + "loadc 30\n"
-        + "loadc 40\n"
-        + "return 0";*@
-}
-
 <div style="margin: 10vw;">
     <div class="left-view">
-        <textarea style="height: 100%; width: 100%" @bind="Memory.BindableBase.Text" @bind:event="oninput"></textarea>
-        <input type="button" value="Interpret" style="display: inline-block; width: 100%" @onclick="() => Interpreter.Program = Parser.ParseInstructions()" />
+        <textarea style="height: 100%; width: 100%" @bind="DataStructure.BindableBase.Text" @bind:event="oninput"></textarea>
+        <input type="button" value="Load >>" style="display: inline-block; width: 100%" @onclick="() => DataStructure.ProgramStoreC = Parser.ParseInstructions()" />
     </div>
     <div class="center-view">
         <table style="height: 100%">
             <tr style="height: 100%"></tr>
 
-            @if (Interpreter.Program != null
-                 && Interpreter.Program.Count > 0)
+            @if (DataStructure.ProgramStoreC != null
+                 && DataStructure.ProgramStoreC.Count > 0)
             {
                 <tr>
                     <th><span style="color: white">></span></th>
@@ -46,42 +20,42 @@
                     <th>Instruction</th>
                     <th>PC</th>
                     <th>FP</th>
-                    <th style="background-color: lightblue">SP</th>
-                    <th style="background-color: lightgreen">EP</th>
+                    <th style="background-color: darkgray">SP</th>
+                    <th style="background-color: lightgray">EP</th>
                     <th>HP</th>
                 </tr>
-                foreach (Instruction instruction in Interpreter.Program)
+                foreach (Instruction instruction in DataStructure.ProgramStoreC)
                 {
                     <tr>
                         <td>
-                            @if (Interpreter.Program.IndexOf(instruction) == Interpreter.Registers.ProgramCounter)
+                            @if (DataStructure.ProgramStoreC.IndexOf(instruction) == VirtualMachine.Registers.ProgramCounter)
                             {
                                 <b>></b>
                             }
                         </td>
                         <td>@instruction.Address</td>
-                        <td><b>@String.Join(' ', instruction.ValueWithArgs)</b></td>
+                        <td>@String.Join(' ', instruction.ValueWithArgs)</td>
 
-                        @if (Interpreter.Program.IndexOf(instruction) == 0)
+                        @if (DataStructure.ProgramStoreC.IndexOf(instruction) == 0)
                         {
-                            <td>@Interpreter.Registers.ProgramCounter</td>
-                            <td>@Interpreter.Registers.FramePointer</td>
-                            <td style="background-color: lightblue">@Interpreter.Registers.StackPointer</td>
-                            <td style="background-color: lightgreen">@Interpreter.Registers.ExtremePointer</td>
-                            <td>@Interpreter.Registers.HeapPointer</td>
+                            <td>@VirtualMachine.Registers.ProgramCounter</td>
+                            <td>@VirtualMachine.Registers.FramePointer</td>
+                            <td style="background-color: darkgray">@VirtualMachine.Registers.StackPointer</td>
+                            <td style="background-color: lightgray">@VirtualMachine.Registers.ExtremePointer</td>
+                            <td>@VirtualMachine.Registers.HeapPointer</td>
                         }
                         else
                         {
-                            <td colspan="5" style="background-color: lightgray"></td>
+                            <td colspan="5"></td>
                         }
                     </tr>
                 }
                 <tr>
                 <td colspan="8">
                 <div style="margin: 2vw; text-align: center">
-                    <input type="button" value="Restart" @onclick="() => Interpreter.Run(Interpreter.Move.Restart)"/>
-                    <input type="button" value="Next" @onclick="() => Interpreter.Run(Interpreter.Move.Next)"/>
-                    <input type="button" value="Run" @onclick="() => Interpreter.Run(Interpreter.Move.End)"/>
+                    <input type="button" value="Restart" @onclick="() => VirtualMachine.Interpret(VirtualMachine.Move.Restart)"/>
+                    <input type="button" value="Next" @onclick="() => VirtualMachine.Interpret(VirtualMachine.Move.Next)"/>
+                    <input type="button" value="Run" @onclick="() => VirtualMachine.Interpret(VirtualMachine.Move.Run)"/>
                 </div>
                 </td >
                 </tr >
@@ -101,25 +75,25 @@
                 <th>Address</th>
                 <th>Value</th>
             </tr>
-            @for (int i = Memory.HeapSize; i >= 0; i--)
+            @for (int i = DataStructure.HeapSize; i >= 0; i--)
             {
                 <tr>
                     @{
                         string color = "white";
 
-                        if (i <= Interpreter.Registers.ExtremePointer)
+                        if (i <= VirtualMachine.Registers.ExtremePointer)
                         {
-                            color = "lightgreen";
+                            color = "lightgray";
                         }
 
-                        if (i <= Interpreter.Registers.StackPointer)
+                        if (i <= VirtualMachine.Registers.StackPointer)
                         {
-                            color = "lightblue";
+                            color = "darkgray";
                         }
                     }
 
                     <td style="background-color: @color">@i</td>
-                    <td style="background-color: @color">@Memory.Main[i]</td>
+                    <td style="background-color: @color">@DataStructure.MainMemoryS[i]</td>
                 </tr>
             }
             <tr>

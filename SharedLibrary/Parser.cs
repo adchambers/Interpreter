@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SharedLibrary
 {
@@ -10,26 +9,26 @@ namespace SharedLibrary
 
         public static IList<Instruction> ParseInstructions()
         {
-            if (string.IsNullOrWhiteSpace(Memory.BindableBase.Text) == false)
-            {
-                string[] commandStrings = Memory.BindableBase.Text.Split("\n");
+            VirtualMachine.Init();
 
-                Interpreter.CommandStrings = commandStrings.ToList();
+            if (string.IsNullOrWhiteSpace(DataStructure.BindableBase.Text) == false)
+            {
+                string[] input = DataStructure.BindableBase.Text.Split("\n");
 
                 IList<Instruction> instructions = new List<Instruction>();
 
                 int address = 0;
 
-                foreach (string commandString in commandStrings)
+                foreach (string instruction in input)
                 {
-                    string[] valueWithArgs = commandString.Split(" ");
+                    string[] valueWithArgs = instruction.Split(" ");
 
                     switch (valueWithArgs[0])
                     {
                         case "add":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Add()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Add()));
                             }
                             else
                             {
@@ -42,7 +41,7 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Alloc(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Alloc(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
@@ -55,7 +54,7 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Call(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Call(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
@@ -66,7 +65,7 @@ namespace SharedLibrary
                         case "dup":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Dup()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Dup()));
                             }
                             else
                             {
@@ -78,7 +77,7 @@ namespace SharedLibrary
                         case "halt":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Halt()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Halt()));
                             }
                             else
                             {
@@ -91,7 +90,7 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Jumpi(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Jumpi(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
@@ -104,7 +103,7 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Jumpz(valueWithArgs[1])));
+                                    () => Instruction.Jumpz(valueWithArgs[1])));
                             }
                             else
                             {
@@ -115,7 +114,7 @@ namespace SharedLibrary
                         case "leq":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Leq()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Leq()));
                             }
                             else
                             {
@@ -126,13 +125,13 @@ namespace SharedLibrary
                         case "load":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Load()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Load()));
                             }
                             else if (valueWithArgs.Length == 2)
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Load(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Load(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
@@ -145,14 +144,14 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Loada(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Loada(int.Parse(valueWithArgs[1]))));
                             }
                             else if (valueWithArgs.Length == 3)
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
                                     () =>
-                                        Command.Loada(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                                        Instruction.Loada(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
                             }
                             else
                             {
@@ -165,7 +164,7 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Loadc(valueWithArgs[1])));
+                                    () => Instruction.Loadc(valueWithArgs[1])));
                             }
                             else
                             {
@@ -178,14 +177,14 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Loadr(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Loadr(int.Parse(valueWithArgs[1]))));
                             }
                             else if (valueWithArgs.Length == 3)
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
                                     () =>
-                                        Command.Loadr(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                                        Instruction.Loadr(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
                             }
                             else
                             {
@@ -198,7 +197,7 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Loadrc(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Loadrc(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
@@ -209,7 +208,7 @@ namespace SharedLibrary
                         case "mark":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Mark()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Mark()));
                             }
                             else
                             {
@@ -220,7 +219,7 @@ namespace SharedLibrary
                         case "mul":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Mul()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Mul()));
                             }
                             else
                             {
@@ -231,7 +230,7 @@ namespace SharedLibrary
                         case "new":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.New()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.New()));
                             }
                             else
                             {
@@ -242,7 +241,7 @@ namespace SharedLibrary
                         case "pop":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Pop()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Pop()));
                             }
                             else
                             {
@@ -253,7 +252,7 @@ namespace SharedLibrary
                         case "print":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Print()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Print()));
                             }
                             else
                             {
@@ -266,7 +265,7 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Return(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Return(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
@@ -280,7 +279,7 @@ namespace SharedLibrary
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
                                     () =>
-                                        Command.Slide(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                                        Instruction.Slide(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
                             }
                             else
                             {
@@ -292,7 +291,7 @@ namespace SharedLibrary
                         case "sub":
                             if (valueWithArgs.Length == 1)
                             {
-                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Sub()));
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Sub()));
                             }
                             else
                             {
@@ -305,14 +304,14 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Store(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Store(int.Parse(valueWithArgs[1]))));
                             }
                             else if (valueWithArgs.Length == 2)
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
                                     () =>
-                                        Command.Store(int.Parse(valueWithArgs[1]))));
+                                        Instruction.Store(int.Parse(valueWithArgs[1]))));
                             }
                             else
                             {
@@ -325,14 +324,14 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Storea(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Storea(int.Parse(valueWithArgs[1]))));
                             }
                             else if (valueWithArgs.Length == 3)
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
                                     () =>
-                                        Command.Storea(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                                        Instruction.Storea(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
                             }
                             else
                             {
@@ -345,14 +344,14 @@ namespace SharedLibrary
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
-                                    () => Command.Storer(int.Parse(valueWithArgs[1]))));
+                                    () => Instruction.Storer(int.Parse(valueWithArgs[1]))));
                             }
                             else if (valueWithArgs.Length == 3)
                             {
                                 instructions.Add(new Instruction(address,
                                     valueWithArgs,
                                     () =>
-                                        Command.Storer(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
+                                        Instruction.Storer(int.Parse(valueWithArgs[1]), int.Parse(valueWithArgs[2]))));
                             }
                             else
                             {
@@ -367,7 +366,7 @@ namespace SharedLibrary
                                 {
                                     instructions.Add(new Instruction(address,
                                         valueWithArgs,
-                                        () => Command.Enter(int.Parse(valueWithArgs[1]))));
+                                        () => Instruction.Enter(int.Parse(valueWithArgs[1]))));
                                 }
                                 else
                                 {
@@ -380,7 +379,7 @@ namespace SharedLibrary
                                 {
                                     instructions.Add(new Instruction(address,
                                         valueWithArgs,
-                                        () => Command.Enter(int.Parse(valueWithArgs[2])),
+                                        () => Instruction.Enter(int.Parse(valueWithArgs[2])),
                                         valueWithArgs[0]));
                                 }
                                 else

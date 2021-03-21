@@ -67,7 +67,7 @@
 
             this.FramePointer = 0;
 
-            this.HeapPointer = Memory.HeapSize;
+            this.HeapPointer = DataStructure.HeapSize;
 
             this.ExtremePointer = -1;
         }

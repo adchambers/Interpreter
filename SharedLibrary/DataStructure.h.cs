@@ -2,7 +2,7 @@
 
 namespace SharedLibrary
 {
-    public static class Memory
+    public static partial class DataStructure
     {
         #region Fields
 
@@ -83,19 +83,17 @@ namespace SharedLibrary
                                                  + "storer -3\n"
                                                  + "return 0";
 
-        public static int HeapSize = 64;
-
         #endregion
 
         #region Constructors
 
-        static Memory()
+        static DataStructure()
         {
-            Memory.BindableBase = new BindableBase();
+            DataStructure.BindableBase = new BindableBase();
 
-            Memory.InitMainMemory();
+            DataStructure.InitMainMemory();
 
-            Memory.BindableBase.Text = Memory.problem19;
+            DataStructure.BindableBase.Text = DataStructure.problem19;
         }
 
         #endregion
@@ -104,19 +102,17 @@ namespace SharedLibrary
 
         public static BindableBase BindableBase { get; set; }
 
-        public static ObservableCollection<int> Main { get; set; }
-
         #endregion
 
         #region Methods
 
         public static void InitMainMemory()
         {
-            Memory.Main = new ObservableCollection<int>();
+            DataStructure.MainMemoryS = new ObservableCollection<int>();
 
-            for (int i = 0; i <= Memory.HeapSize; i++)
+            for (int i = 0; i <= DataStructure.HeapSize; i++)
             {
-                Memory.Main.Add(0);
+                DataStructure.MainMemoryS.Add(0);
             }
         }
 
