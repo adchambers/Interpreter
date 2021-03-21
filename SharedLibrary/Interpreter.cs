@@ -29,29 +29,46 @@ namespace SharedLibrary
 
         public static void Run(Move move)
         {
-            if (move == Move.Restart)
+            switch (move)
             {
-                Interpreter.Registers.ProgramCounter = Registers.ProgramCounterStart;
+                case Move.Restart:
+                    Interpreter.Registers.ProgramCounter = Registers.ProgramCounterStart;
 
-                Interpreter.Registers.Init();
+                    Interpreter.Registers.Init();
 
-                Memory.InitMainMemory();
+                    Memory.InitMainMemory();
 
-                return;
-            }
+                    return;
+                case Move.End:
+                    while (Interpreter.Program[Interpreter.Registers.ProgramCounter].Arg1 != "halt")
+                    {
+                        if (Interpreter.Registers.ProgramCounter < Interpreter.Program.Count)
+                        {
+                            Action instruction = Interpreter.Program[Interpreter.Registers.ProgramCounter].Action;
 
-            if (Interpreter.Program[Interpreter.Registers.ProgramCounter].Arg1 == "halt")
-            {
-                return;
-            }
+                            Interpreter.Registers.ProgramCounter++;
 
-            if (Interpreter.Registers.ProgramCounter < Interpreter.Program.Count)
-            {
-                Action instruction = Interpreter.Program[Interpreter.Registers.ProgramCounter].Action;
+                            instruction.Invoke();
+                        }
+                    }
 
-                Interpreter.Registers.ProgramCounter++;
+                    return;
+                case Move.Next:
+                    if (Interpreter.Program[Interpreter.Registers.ProgramCounter].Arg1 == "halt")
+                    {
+                        return;
+                    }
 
-                instruction.Invoke();
+                    if (Interpreter.Registers.ProgramCounter < Interpreter.Program.Count)
+                    {
+                        Action instruction = Interpreter.Program[Interpreter.Registers.ProgramCounter].Action;
+
+                        Interpreter.Registers.ProgramCounter++;
+
+                        instruction.Invoke();
+                    }
+
+                    return;
             }
         }
 
