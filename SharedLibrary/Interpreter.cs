@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SharedLibrary
 {
@@ -39,11 +40,18 @@ namespace SharedLibrary
                 return;
             }
 
+            if (Interpreter.Program[Interpreter.Registers.ProgramCounter].Arg1 == "halt")
+            {
+                return;
+            }
+
             if (Interpreter.Registers.ProgramCounter < Interpreter.Program.Count)
             {
-                Interpreter.Program[Interpreter.Registers.ProgramCounter].Action.Invoke();
+                Action instruction = Interpreter.Program[Interpreter.Registers.ProgramCounter].Action;
 
                 Interpreter.Registers.ProgramCounter++;
+
+                instruction.Invoke();
             }
         }
 

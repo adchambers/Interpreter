@@ -15,6 +15,14 @@ namespace SharedLibrary
             Interpreter.Registers.StackPointer--;
         }
 
+        public static void Sub()
+        {
+            Memory.Main[Interpreter.Registers.StackPointer - 1] =
+                Memory.Main[Interpreter.Registers.StackPointer - 1] - Memory.Main[Interpreter.Registers.StackPointer];
+
+            Interpreter.Registers.StackPointer--;
+        }
+
         public static void Alloc(int m)
         {
             Interpreter.Registers.StackPointer = Interpreter.Registers.StackPointer + m;
@@ -22,14 +30,23 @@ namespace SharedLibrary
 
         public static void Call(int q)
         {
-            Interpreter.Registers.FramePointer = Interpreter.Registers.StackPointer;
+            // *
+            Interpreter.Registers.FramePointer = Interpreter.Registers.StackPointer - q - 1;
 
-            int tmp = Interpreter.Registers.ProgramCounter;
+            Memory.Main[Interpreter.Registers.FramePointer] = Interpreter.Registers.ProgramCounter;
 
-            // Modified form of call is required; otherwise, the ProgramCounter is incremented +1 beyond the called function's address
-            Interpreter.Registers.ProgramCounter = Memory.Main[Interpreter.Registers.StackPointer] - q;
+            Interpreter.Registers.ProgramCounter = Memory.Main[Interpreter.Registers.StackPointer];
 
-            Memory.Main[Interpreter.Registers.StackPointer] = tmp;
+            Interpreter.Registers.StackPointer--;
+
+            //int tmp = Interpreter.Registers.ProgramCounter;
+
+            //Interpreter.Registers.ProgramCounter = Memory.Main[Interpreter.Registers.StackPointer];
+
+            //Memory.Main[Interpreter.Registers.StackPointer] = tmp;
+
+            // *
+            Interpreter.Program[Interpreter.Registers.ProgramCounter].Action.Invoke();
         }
 
         public static void Dup()
@@ -40,6 +57,11 @@ namespace SharedLibrary
         public static void Enter(int m)
         {
             Interpreter.Registers.ExtremePointer = Interpreter.Registers.StackPointer + m;
+
+            if (Interpreter.Registers.HeapPointer < Interpreter.Registers.ExtremePointer)
+            {
+                throw new Exception("Stack overflow");
+            }
         }
 
         public static void Jumpi(int b)
@@ -49,9 +71,46 @@ namespace SharedLibrary
             Interpreter.Registers.StackPointer--;
         }
 
+        public static void Jumpz(object q)
+        {
+            if (Memory.Main[Interpreter.Registers.StackPointer] == 0)
+            {
+                bool isInt = int.TryParse(q.ToString(), out int qq);
+
+                //Jump to address
+                if (isInt)
+                {
+                    Interpreter.Registers.ProgramCounter = qq;
+                }
+                //Jump to address assigned to name (of function)
+                else
+                {
+                    Interpreter.Registers.ProgramCounter = Interpreter.Program
+                        .First(instruction => instruction.Name == q.ToString())
+                        .Address;
+                }
+            }
+
+            Interpreter.Registers.StackPointer--;
+        }
+
         public static void Halt()
         {
             //TODO: implement
+        }
+
+        public static void Leq()
+        {
+            if (Memory.Main[Interpreter.Registers.StackPointer - 1] <= Memory.Main[Interpreter.Registers.StackPointer])
+            {
+                Memory.Main[Interpreter.Registers.StackPointer - 1] = 1;
+            }
+            else
+            {
+                Memory.Main[Interpreter.Registers.StackPointer - 1] = 0;
+            }
+
+            Interpreter.Registers.StackPointer--;
         }
 
         public static void Load()
@@ -109,7 +168,9 @@ namespace SharedLibrary
 
         public static void Loadr(int j)
         {
-            Command.Loadr(j, 1);
+            Interpreter.Registers.StackPointer = Interpreter.Registers.StackPointer + 1;
+
+            Memory.Main[Interpreter.Registers.StackPointer] = Memory.Main[Interpreter.Registers.FramePointer + j];
         }
 
         public static void Loadr(int j, int m)
@@ -132,7 +193,15 @@ namespace SharedLibrary
 
             Memory.Main[Interpreter.Registers.StackPointer + 2] = Interpreter.Registers.FramePointer;
 
-            Interpreter.Registers.StackPointer = Interpreter.Registers.StackPointer + 2;
+            Interpreter.Registers.StackPointer = Interpreter.Registers.StackPointer + 3;
+        }
+
+        public static void Mul()
+        {
+            Memory.Main[Interpreter.Registers.StackPointer - 1] = Memory.Main[Interpreter.Registers.StackPointer - 1]
+                                                                  * Memory.Main[Interpreter.Registers.StackPointer];
+
+            Interpreter.Registers.StackPointer--;
         }
 
         public static void New()
@@ -167,7 +236,7 @@ namespace SharedLibrary
                 throw new Exception("Stack Overflow");
             }
 
-            Interpreter.Registers.StackPointer = Interpreter.Registers.FramePointer - q;
+            Interpreter.Registers.StackPointer = Interpreter.Registers.FramePointer - 3;
 
             Interpreter.Registers.FramePointer = Memory.Main[Interpreter.Registers.FramePointer - 1];
         }
@@ -230,7 +299,9 @@ namespace SharedLibrary
 
         public static void Storer(int j)
         {
-            Command.Storer(j, 1);
+            Memory.Main[Interpreter.Registers.FramePointer + j] = Memory.Main[Interpreter.Registers.StackPointer];
+
+            Interpreter.Registers.StackPointer = Interpreter.Registers.StackPointer - 1;
         }
 
         public static void Storer(int j, int m)

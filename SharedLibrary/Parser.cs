@@ -99,6 +99,30 @@ namespace SharedLibrary
                             }
 
                             break;
+                        case "jumpz":
+                            if (valueWithArgs.Length == 2)
+                            {
+                                instructions.Add(new Instruction(address,
+                                    valueWithArgs,
+                                    () => Command.Jumpz(valueWithArgs[1])));
+                            }
+                            else
+                            {
+                                throw new Exception("Jumpz takes 1 argument.");
+                            }
+
+                            break;
+                        case "leq":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Leq()));
+                            }
+                            else
+                            {
+                                throw new Exception("Leq takes 0 arguments.");
+                            }
+
+                            break;
                         case "load":
                             if (valueWithArgs.Length == 1)
                             {
@@ -193,6 +217,17 @@ namespace SharedLibrary
                             }
 
                             break;
+                        case "mul":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Mul()));
+                            }
+                            else
+                            {
+                                throw new Exception("Mul takes 0 arguments.");
+                            }
+
+                            break;
                         case "new":
                             if (valueWithArgs.Length == 1)
                             {
@@ -239,6 +274,18 @@ namespace SharedLibrary
                             else
                             {
                                 throw new Exception("Slide takes 2 argument.");
+                            }
+
+                            break;
+
+                        case "sub":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Sub()));
+                            }
+                            else
+                            {
+                                throw new Exception("Sub takes 0 arguments.");
                             }
 
                             break;
