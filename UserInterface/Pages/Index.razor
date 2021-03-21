@@ -44,10 +44,10 @@
                     <th><span style="color: white">></span></th>
                     <th>PC Address</th>
                     <th>Instruction</th>
-                    <th style="background-color: lightblue">SP</th>
-                    <th>FP</th>
-                    <th style="background-color: lightgreen">EP</th>
                     <th>PC</th>
+                    <th>FP</th>
+                    <th style="background-color: lightblue">SP</th>
+                    <th style="background-color: lightgreen">EP</th>
                     <th>HP</th>
                 </tr>
                 foreach (Instruction instruction in Interpreter.Program)
@@ -64,10 +64,10 @@
 
                         @if (Interpreter.Program.IndexOf(instruction) == 0)
                         {
-                            <td>@Interpreter.Registers.StackPointer</td>
-                            <td>@Interpreter.Registers.FramePointer</td>
-                            <td>@Interpreter.Registers.ExtremePointer</td>
                             <td>@Interpreter.Registers.ProgramCounter</td>
+                            <td>@Interpreter.Registers.FramePointer</td>
+                            <td style="background-color: lightblue">@Interpreter.Registers.StackPointer</td>
+                            <td style="background-color: lightgreen">@Interpreter.Registers.ExtremePointer</td>
                             <td>@Interpreter.Registers.HeapPointer</td>
                         }
                         else

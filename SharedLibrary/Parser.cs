@@ -250,6 +250,17 @@ namespace SharedLibrary
                             }
 
                             break;
+                        case "print":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Command.Print()));
+                            }
+                            else
+                            {
+                                throw new Exception("Print takes 0 arguments.");
+                            }
+
+                            break;
                         case "return":
                             if (valueWithArgs.Length == 2)
                             {

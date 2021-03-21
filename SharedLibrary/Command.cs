@@ -30,7 +30,6 @@ namespace SharedLibrary
 
         public static void Call(int q)
         {
-            // *
             Interpreter.Registers.FramePointer = Interpreter.Registers.StackPointer - q - 1;
 
             Memory.Main[Interpreter.Registers.FramePointer] = Interpreter.Registers.ProgramCounter;
@@ -38,15 +37,6 @@ namespace SharedLibrary
             Interpreter.Registers.ProgramCounter = Memory.Main[Interpreter.Registers.StackPointer];
 
             Interpreter.Registers.StackPointer--;
-
-            //int tmp = Interpreter.Registers.ProgramCounter;
-
-            //Interpreter.Registers.ProgramCounter = Memory.Main[Interpreter.Registers.StackPointer];
-
-            //Memory.Main[Interpreter.Registers.StackPointer] = tmp;
-
-            // *
-            Interpreter.Program[Interpreter.Registers.ProgramCounter].Action.Invoke();
         }
 
         public static void Dup()
@@ -223,6 +213,11 @@ namespace SharedLibrary
         public static void Pop()
         {
             Interpreter.Registers.StackPointer--;
+        }
+
+        public static void Print()
+        {
+            Console.WriteLine(Memory.Main[Interpreter.Registers.StackPointer]);
         }
 
         public static void Return(int q)
