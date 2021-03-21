@@ -139,6 +139,36 @@ namespace SharedLibrary
             VirtualMachine.Registers.StackPointer--;
         }
 
+        public static void Geq()
+        {
+            if (DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1]
+                >= DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer])
+            {
+                DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1] = 1;
+            }
+            else
+            {
+                DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1] = 0;
+            }
+
+            VirtualMachine.Registers.StackPointer--;
+        }
+
+        public static void Le()
+        {
+            if (DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1]
+                < DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer])
+            {
+                DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1] = 1;
+            }
+            else
+            {
+                DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1] = 0;
+            }
+
+            VirtualMachine.Registers.StackPointer--;
+        }
+
         public static void Load()
         {
             DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer] =
@@ -274,7 +304,7 @@ namespace SharedLibrary
                 throw new Exception("Stack Overflow");
             }
 
-            VirtualMachine.Registers.StackPointer = VirtualMachine.Registers.FramePointer - 3;
+            VirtualMachine.Registers.StackPointer = VirtualMachine.Registers.FramePointer - q;
 
             VirtualMachine.Registers.FramePointer =
                 DataStructure.MainMemoryS[VirtualMachine.Registers.FramePointer - 1];

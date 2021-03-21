@@ -73,6 +73,17 @@ namespace SharedLibrary
                             }
 
                             break;
+                        case "geq":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Geq()));
+                            }
+                            else
+                            {
+                                throw new Exception("Geq takes 0 arguments.");
+                            }
+
+                            break;
 
                         case "halt":
                             if (valueWithArgs.Length == 1)
@@ -108,6 +119,17 @@ namespace SharedLibrary
                             else
                             {
                                 throw new Exception("Jumpz takes 1 argument.");
+                            }
+
+                            break;
+                        case "le":
+                            if (valueWithArgs.Length == 1)
+                            {
+                                instructions.Add(new Instruction(address, valueWithArgs, () => Instruction.Le()));
+                            }
+                            else
+                            {
+                                throw new Exception("Le takes 0 arguments.");
                             }
 
                             break;
