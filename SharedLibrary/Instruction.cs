@@ -47,15 +47,6 @@ namespace SharedLibrary
             VirtualMachine.Registers.StackPointer--;
         }
 
-        public static void Sub()
-        {
-            DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1] =
-                DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1]
-                - DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer];
-
-            VirtualMachine.Registers.StackPointer--;
-        }
-
         public static void Alloc(int m)
         {
             VirtualMachine.Registers.StackPointer = VirtualMachine.Registers.StackPointer + m;
@@ -379,6 +370,14 @@ namespace SharedLibrary
             Instruction.Loadrc(j);
 
             Instruction.Store(m);
+        }
+        public static void Sub()
+        {
+            DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1] =
+                DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer - 1]
+                - DataStructure.MainMemoryS[VirtualMachine.Registers.StackPointer];
+
+            VirtualMachine.Registers.StackPointer--;
         }
 
         #endregion

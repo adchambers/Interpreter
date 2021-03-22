@@ -181,7 +181,7 @@ namespace SharedLibrary
 
             DataStructure.InitMainMemory();
 
-            DataStructure.BindableBase.Text = DataStructure.problem19;
+            DataStructure.BindableBase.Text = DataStructure.problem18;
         }
 
         #endregion
